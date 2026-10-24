@@ -332,6 +332,7 @@ textarea{width:100%;min-height:110px;border:1px solid var(--line);border-radius:
   <div class="stop">
     <button class="sbtn glass" id="btnCloseScan" aria-label="Uždaryti"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     <div class="mode glass" role="group" aria-label="Režimas"><button id="modeShop" aria-pressed="true">Perku</button><button id="modeCheck" aria-pressed="false">Tikrinu</button></div>
+    <button class="sbtn glass" id="btnZoom" aria-label="Priartinti" hidden style="font-weight:700;font-size:14px">1×</button>
     <button class="sbtn glass" id="btnTorch" aria-label="Žibintuvėlis" aria-pressed="false" hidden><svg class="i" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg></button>
     <span id="torchSpacer" style="width:44px"></span>
   </div>
@@ -475,19 +476,27 @@ function seed(){
 
 /* ---------- Open Food Facts ---------- */
 const OFF='https://world.openfoodfacts.org';
-const offLink=code=>`${OFF}/product/${code}`;
+const DBS=[['https://world.openfoodfacts.org','Open Food Facts'],['https://world.openbeautyfacts.org','Open Beauty Facts'],['https://world.openproductsfacts.org','Open Products Facts'],['https://world.openpetfoodfacts.org','Open Pet Food Facts']];
+const offLink=(code,base)=>`${base||OFF}/product/${code}`;
+const FIELDS='product_name,product_name_lt,generic_name,brands,quantity,image_front_small_url,image_front_url,image_url,nutriscore_grade,nova_group,categories,ingredients_text,ingredients_text_lt,allergens_tags,nutriments';
+async function fetchDb(base,code){
+  const ctl=new AbortController();const t=setTimeout(()=>ctl.abort(),9000);
+  try{const r=await fetch(`${base}/api/v2/product/${code}.json?fields=${FIELDS}`,{signal:ctl.signal});
+    if(r.status===404)return null;const j=await r.json();return j&&j.status===1&&j.product?j.product:null}
+  finally{clearTimeout(t)}
+}
 async function lookup(code){
   const key=keyOf(code);
   if(db.cache[key]&&(db.cache[key].found||db.cache[key].manual))return db.cache[key];
   if(isWeighed(code))return{found:false,weighed:true};
-  const fields='product_name,product_name_lt,generic_name,brands,quantity,image_front_small_url,image_front_url,image_url,nutriscore_grade,nova_group,categories,ingredients_text,ingredients_text_lt,allergens_tags,nutriments';
   try{
-    const ctl=new AbortController();const t=setTimeout(()=>ctl.abort(),9000);
-    const r=await fetch(`${OFF}/api/v2/product/${code}.json?fields=${fields}`,{signal:ctl.signal});clearTimeout(t);
-    if(r.status===404)return{found:false};
-    const j=await r.json();
-    if(!j||j.status!==1||!j.product)return{found:false};
-    const p=j.product,nm=p.nutriments||{};
+    // food first (most hits), then the sister databases in parallel
+    let p=await fetchDb(DBS[0][0],code),base=DBS[0];
+    if(!p){const rs=await Promise.allSettled(DBS.slice(1).map(d=>fetchDb(d[0],code)));
+      const i=rs.findIndex(r=>r.status==='fulfilled'&&r.value);if(i>=0){p=rs[i].value;base=DBS[i+1]}
+      else if(rs.every(r=>r.status==='rejected'))throw new Error('net')}
+    if(!p)return{found:false};
+    const nm=p.nutriments||{};
     const num=k=>{const v=nm[k];return v===undefined||v===''?null:+v};
     const info={found:true,
       name:p.product_name_lt||p.product_name||p.generic_name||'',
@@ -500,7 +509,8 @@ async function lookup(code){
       n:{kcal:num('energy-kcal_100g'),fat:num('fat_100g'),sat:num('saturated-fat_100g'),carbs:num('carbohydrates_100g'),sugars:num('sugars_100g'),protein:num('proteins_100g'),salt:num('salt_100g')},
       allergens:(p.allergens_tags||[]).map(a=>a.replace(/^[a-z]{2}:/,'').replace(/-/g,' ')),
       ingredients:p.ingredients_text_lt||p.ingredients_text||'',
-      categories:(p.categories||'').split(',').map(s=>s.trim()).filter(Boolean).slice(-3)};
+      categories:(p.categories||'').split(',').map(s=>s.trim()).filter(Boolean).slice(-3),
+      db:base[0],dbName:base[1]};
     db.cache[key]=info;save();return info;
   }catch(e){return{found:false,error:true}}
 }
@@ -690,7 +700,7 @@ function renderProduct(){
     <div class="field"><span class="lab">Kur dėsi</span><div class="seg">${LOCS.map(l=>`<button data-loc="${l.id}" aria-pressed="${c.loc===l.id}">${l.label}</button>`).join('')}</div></div>
     <div class="field"><label for="expIn">Galioja iki (nebūtina)</label><div class="daterow"><input type="date" id="expIn" value="${esc(c.expiry)}">
       <div class="seg"><button data-exp="3">+3 d.</button><button data-exp="7">+7 d.</button><button data-exp="30">+1 mėn.</button></div></div></div>
-    <div class="row2"><button class="btn ghost" data-act="reject">Atmesti</button><button class="btn primary" data-act="add" ${needName&&!c.name?'disabled':''}>Įdėti ${c.qty} vnt.</button></div>`;
+    <div class="row2"><button class="btn ghost" data-act="reject">Atmesti</button><button class="btn primary" data-act="add">Įdėti ${c.qty} vnt.</button></div>`;
   if(mode==='check'&&it)h+=consume+`<details class="panel" style="padding:0 14px"><summary style="padding:14px 0">Nupirkau dar…</summary><div style="display:flex;flex-direction:column;gap:12px;padding-bottom:14px">${addInner}</div></details>`;
   else h+=`<div class="panel"><h3>${it?'Nupirkau dar':'Įdėti į sandėliuką'}</h3>${addInner}</div>`+consume;
 
@@ -707,7 +717,7 @@ function renderProduct(){
     <div class="nrow"><span>Druska</span><span class="mono">${fmtN(n.salt)} g</span></div></div>`;
   if(info.ingredients)h+=`<details><summary>Sudėtis</summary><p>${esc(info.ingredients)}</p></details>`;
   if(info.categories&&info.categories.length)h+=`<p class="note">Kategorija: ${esc(info.categories.join(' › '))}</p>`;
-  if(!isWeighed(code))h+=`<a class="extlink" href="${offLink(code)}" target="_blank" rel="noopener">${info.found&&!info.demo?'<span>Visa informacija<small>Open Food Facts</small></span>':'<span>Pridėti produktą į duombazę<small>Open Food Facts: atvira, nemokama</small></span>'}<svg class="i" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></a>`;
+  if(!isWeighed(code))h+=`<a class="extlink" href="${offLink(code,info.db)}" target="_blank" rel="noopener">${info.found&&!info.demo?`<span>Visa informacija<small>${esc(info.dbName||'Open Food Facts')}</small></span>`:'<span>Pridėti produktą į duombazę<small>Open Food Facts: atvira, nemokama</small></span>'}<svg class="i" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></a>`;
   if(photos[key])h+=`<button class="linkbtn" data-act="delPhoto">Ištrinti savo nuotrauką</button>`;
   if(it)h+=`<button class="linkbtn" data-act="removeAll">Pašalinti visus ${qtyOf(it)} vnt. iš sandėliuko</button>`;
   if(info.demo)h+=`<p class="note" style="text-align:center">Pavyzdinis produktas, duomenys sugalvoti.</p>`;
@@ -723,7 +733,7 @@ $('#sheetBody').addEventListener('click',e=>{
   if(a==='photo'){picking=true;$('#photoIn').value='';$('#photoIn').click();return}
   if(a==='delPhoto'){delete photos[c.key];idb.del(c.key);render();renderProduct();return}
   if(a==='reject'){closeSheet();return}
-  if(a==='add'){const inp=$('#nameIn');const nm=inp?inp.value.trim():'';if(inp&&!nm){inp.focus();return}
+  if(a==='add'){const inp=$('#nameIn');const nm=inp?inp.value.trim():'';if(inp&&!nm){inp.focus();inp.scrollIntoView({block:'center'});toast('Pirmiausia įrašyk pavadinimą',false);return}
     addItem(c.code,c.info,c.qty,c.loc,c.expiry,nm);const q=c.qty;closeSheet();toast(`Įdėta: ${q} vnt.`);navigator.vibrate&&navigator.vibrate(20);return}
   if(a==='eat'||a==='toss'||a==='tossBatch'){
     takeOut(c.key,a==='tossBatch'?999:1,a==='eat'?'eat':'toss',b.dataset.b);
@@ -733,7 +743,7 @@ $('#sheetBody').addEventListener('click',e=>{
 $('#sheetBody').addEventListener('input',e=>{
   if(!sheetCtx)return;
   if(e.target.id==='expIn')sheetCtx.expiry=e.target.value;
-  if(e.target.id==='nameIn'){sheetCtx.name=e.target.value;const add=$('[data-act="add"]');if(add)add.disabled=!e.target.value.trim()}
+  if(e.target.id==='nameIn')sheetCtx.name=e.target.value;
 });
 
 /* own photo: resize to 640px JPEG, keep in IndexedDB */
@@ -759,7 +769,7 @@ const scan={stream:null,timer:null,reader:null,busy:false,last:'',lastAt:0,wake:
 const WANT=['ean_13','ean_8','upc_a','upc_e','code_128'];
 function setStatus(html){$('#scanStatus').innerHTML=html}
 function setMode(m){prefs.mode=m;savePrefs();$('#modeShop').setAttribute('aria-pressed',m==='shop');$('#modeCheck').setAttribute('aria-pressed',m==='check');
-  setStatus(m==='shop'?'Parduotuvėje: nuskenuok ir pamatysi, ar jau turi namie':'Sandėliuke: nuskenuok, tada suvalgyk, išmesk ar patikrink datą')}
+  setStatus((m==='shop'?'Parduotuvėje: nuskenuok ir pamatysi, ar jau turi namie':'Sandėliuke: nuskenuok, tada suvalgyk, išmesk ar patikrink datą')+'<br><small style="opacity:.75">Laikyk kodą 15–20 cm nuo kameros, kad vaizdas būtų ryškus</small>')}
 $('#modeShop').onclick=()=>setMode('shop');$('#modeCheck').onclick=()=>setMode('check');
 async function startScanner(){
   $('#scanner').hidden=false;$('#camErr').hidden=true;$('#vf').hidden=false;document.body.style.overflow='hidden';
@@ -770,22 +780,42 @@ async function startScanner(){
   try{
     let native=false;
     if('BarcodeDetector' in window){try{const f=await BarcodeDetector.getSupportedFormats();native=f.includes('ean_13');if(native)scan.formats=WANT.filter(x=>f.includes(x))}catch(e){}}
-    const cons={video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false};
+    if(!native&&!window.ZXing)throw new Error('noscanner');
+    const cons={video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}},audio:false};
+    scan.stream=await navigator.mediaDevices.getUserMedia(cons);
+    video.srcObject=scan.stream;await video.play();
+    tuneCamera();
     if(native){
-      scan.stream=await navigator.mediaDevices.getUserMedia(cons);
-      video.srcObject=scan.stream;await video.play();
       const det=new BarcodeDetector({formats:scan.formats});
       const tick=async()=>{if(!scan.stream)return;
         if(!scan.busy&&video.readyState>=2){try{const r=await det.detect(video);if(r.length)onCode(r[0].rawValue)}catch(e){}}
         scan.timer=setTimeout(tick,180)};tick();
-    }else if(window.ZXing){
+    }else{
       const Z=window.ZXing,hints=new Map();
       hints.set(Z.DecodeHintType.POSSIBLE_FORMATS,[Z.BarcodeFormat.EAN_13,Z.BarcodeFormat.EAN_8,Z.BarcodeFormat.UPC_A,Z.BarcodeFormat.UPC_E,Z.BarcodeFormat.CODE_128]);
       hints.set(Z.DecodeHintType.TRY_HARDER,true);
-      scan.reader=new Z.BrowserMultiFormatReader(hints,250);
-      await scan.reader.decodeFromConstraints({video:cons.video},video,res=>{if(res)onCode(res.getText())});
-      scan.stream=video.srcObject;
-    }else throw new Error('noscanner');
+      scan.reader=new Z.MultiFormatReader();scan.reader.setHints(hints);
+      const cv=document.createElement('canvas'),cx=cv.getContext('2d',{willReadFrequently:true});
+      let n=0;
+      const tick=()=>{if(!scan.stream)return;
+        if(!scan.busy&&video.readyState>=2&&video.videoWidth){
+          try{
+            // crop what is inside the viewfinder (object-fit: cover mapping), every 4th frame the whole picture
+            const vw=video.videoWidth,vh=video.videoHeight,cw=video.clientWidth,ch=video.clientHeight;
+            const sc=Math.max(cw/vw,ch/vh),ox=(cw-vw*sc)/2,oy=(ch-vh*sc)/2;
+            const r=$('#vf').getBoundingClientRect(),m=0.12;
+            let sx=(r.left-ox)/sc-r.width*m/sc,sy=(r.top-oy)/sc-r.height*m/sc,sw=r.width*(1+2*m)/sc,sh=r.height*(1+2*m)/sc;
+            if(n++%4===3){sx=0;sy=0;sw=vw;sh=vh}
+            sx=Math.max(0,sx);sy=Math.max(0,sy);sw=Math.min(sw,vw-sx);sh=Math.min(sh,vh-sy);
+            const k=Math.min(1,1000/sw);cv.width=Math.round(sw*k);cv.height=Math.round(sh*k);
+            cx.drawImage(video,sx,sy,sw,sh,0,0,cv.width,cv.height);
+            const bmp=new Z.BinaryBitmap(new Z.HybridBinarizer(new Z.HTMLCanvasElementLuminanceSource(cv)));
+            const res=scan.reader.decodeWithState?scan.reader.decodeWithState(bmp):scan.reader.decode(bmp,hints);
+            if(res)onCode(res.getText());
+          }catch(e){}
+        }
+        scan.timer=setTimeout(tick,120)};tick();
+    }
     setupTorch();
   }catch(e){
     $('#camErr').hidden=false;$('#vf').hidden=true;
@@ -800,10 +830,26 @@ function stopScanner(){
   try{scan.reader&&scan.reader.reset()}catch(e){}scan.reader=null;
   if(scan.stream){scan.stream.getTracks().forEach(t=>t.stop());scan.stream=null}
   $('#video').srcObject=null;try{scan.wake&&scan.wake.release()}catch(e){}scan.wake=null;
-  $('#scanner').hidden=true;document.body.style.overflow='';$('#btnTorch').hidden=true;$('#torchSpacer').hidden=false;$('#btnTorch').setAttribute('aria-pressed','false');
+  $('#scanner').hidden=true;document.body.style.overflow='';$('#btnTorch').hidden=true;$('#btnZoom').hidden=true;$('#torchSpacer').hidden=false;$('#btnTorch').setAttribute('aria-pressed','false');
 }
 function setupTorch(){const tr=scan.stream&&scan.stream.getVideoTracks()[0];if(!tr||!tr.getCapabilities)return;
   try{if(tr.getCapabilities().torch){$('#btnTorch').hidden=false;$('#torchSpacer').hidden=true}}catch(e){}}
+/* continuous focus + a little zoom: phones cannot focus closer than ~10 cm, zoom lets you hold the code further away */
+const ZOOMS=[1,2,3];
+async function tuneCamera(){
+  const tr=scan.stream&&scan.stream.getVideoTracks()[0];if(!tr)return;
+  let cap={};try{cap=tr.getCapabilities?tr.getCapabilities():{}}catch(e){}
+  if(cap.focusMode&&cap.focusMode.includes('continuous')){try{await tr.applyConstraints({advanced:[{focusMode:'continuous'}]})}catch(e){}}
+  scan.zoomCap=cap.zoom&&cap.zoom.max>1.2?cap.zoom:null;
+  $('#btnZoom').hidden=!scan.zoomCap;
+  if(scan.zoomCap)setZoom(prefs.zoom||1);
+}
+async function setZoom(z){
+  const tr=scan.stream&&scan.stream.getVideoTracks()[0];if(!tr||!scan.zoomCap)return;
+  z=Math.min(Math.max(z,scan.zoomCap.min||1),scan.zoomCap.max);
+  try{await tr.applyConstraints({advanced:[{zoom:z}]});prefs.zoom=z;savePrefs();$('#btnZoom').textContent=(Math.round(z*10)/10)+'×'}catch(e){}
+}
+$('#btnZoom').onclick=()=>{const cur=prefs.zoom||1;const nxt=ZOOMS.find(z=>z>cur+0.01&&z<=scan.zoomCap.max)||1;setZoom(nxt)};
 $('#btnTorch').onclick=async()=>{const tr=scan.stream&&scan.stream.getVideoTracks()[0];if(!tr)return;
   const on=$('#btnTorch').getAttribute('aria-pressed')!=='true';try{await tr.applyConstraints({advanced:[{torch:on}]});$('#btnTorch').setAttribute('aria-pressed',on)}catch(e){}};
 function onCode(raw){
