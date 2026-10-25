@@ -363,7 +363,7 @@ const SITE=!!window.SANDELIUKAS_SITE;
 
 /* ---------- language ---------- */
 const EN={
-'Sandėliukas':'Pantry','Šaldytuvas':'Fridge','Šaldiklis':'Freezer','Istorija':'History',
+'APP':'Little Pantry','Sandėliukas':'Pantry','Šaldytuvas':'Fridge','Šaldiklis':'Freezer','Istorija':'History',
 'be galiojimo datos':'no expiry date','pasibaigė prieš {n} d.':'expired {n} d. ago','galioja tik šiandien':'expires today','galioja iki rytojaus':'expires tomorrow','liko {n} d.':'{n} d. left','iki {d}':'until {d}',
 'Šiandien':'Today','Vakar':'Yesterday',
 'JAV / Kanada':'USA / Canada','Prancūzija':'France','Vokietija':'Germany','Japonija':'Japan','Rusija':'Russia','Estija':'Estonia','Latvija':'Latvia','Lietuva':'Lithuania','Ukraina':'Ukraine','Baltarusija':'Belarus','Jungtinė Karalystė':'United Kingdom','Graikija':'Greece','Belgija / Liuksemburgas':'Belgium / Luxembourg','Portugalija':'Portugal','Danija':'Denmark','Lenkija':'Poland','Rumunija':'Romania','Vengrija':'Hungary','Suomija':'Finland','Kinija':'China','Norvegija':'Norway','Švedija':'Sweden','Šveicarija':'Switzerland','Italija':'Italy','Ispanija':'Spain','Slovakija':'Slovakia','Čekija':'Czechia','Turkija':'Turkey','Nyderlandai':'Netherlands','Austrija':'Austria','Australija':'Australia','Knyga (ISBN)':'Book (ISBN)',
@@ -396,7 +396,7 @@ const EN={
 const LANG=(()=>{try{const p=JSON.parse(localStorage.getItem('sandeliukas.prefs')||'{}');if(p.lang==='lt'||p.lang==='en')return p.lang}catch(e){}return /^lt/i.test(navigator.language||'')?'lt':'en'})();
 const LOC=LANG==='lt'?'lt-LT':'en-GB';
 document.documentElement.lang=LANG;
-function t(s,v){let r=LANG==='en'?(EN[s]??s):s;if(v)for(const k in v)r=r.split('{'+k+'}').join(v[k]);return r}
+function t(s,v){if(s==='APP')return LANG==='en'?EN.APP:'Sandėliukas';let r=LANG==='en'?(EN[s]??s):s;if(v)for(const k in v)r=r.split('{'+k+'}').join(v[k]);return r}
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36);
@@ -616,7 +616,7 @@ let filter='all',q='',histFilter='all',view='pantry';
 function render(){renderPantry();renderHistory();renderHeader()}
 function renderHeader(){
   const units=db.items.reduce((a,b)=>a+qtyOf(b),0);
-  $('#title').textContent=view==='pantry'?t('Sandėliukas'):t('Istorija');
+  $('#title').textContent=view==='pantry'?t('APP'):t('Istorija');
   $('#subtitle').innerHTML=(view==='pantry'
     ?(db.items.length?t('{n} produktai · {u} vnt.',{n:db.items.length,u:units}):t('Tuščia. Nuskenuok pirmą produktą.'))
     :t('Kas nupirkta, suvalgyta ir išmesta'))+(navigator.onLine===false?'<span class="offline">'+t('Be interneto')+'</span>':'');
@@ -938,7 +938,7 @@ if(LANG!=='lt'){const S=[['#btnSettings','aria-label','Nustatymai'],['#q','place
   ['#btnScan','aria-label','Skenuoti brūkšninį kodą'],['#camErr h3','text','Kamera nepasiekiama'],['#camErrMsg','text','Įvesk kodą ranka žemiau.'],['#btnCloseScan','aria-label','Uždaryti'],['.mode','aria-label','Režimas'],['#modeShop','text','Perku'],['#modeCheck','text','Tikrinu'],['#btnZoom','aria-label','Priartinti'],['#btnTorch','aria-label','Žibintuvėlis'],
   ['#scanStatus','text','Nukreipk kamerą į brūkšninį kodą'],['#manualCode','placeholder','Arba įvesk kodą'],['#manualCode','aria-label','Brūkšninis kodas'],['#manualForm button','text','Ieškoti'],['#btnSheetClose','aria-label','Uždaryti'],['#toastUndo','text','Atšaukti'],['#tabPantry','text','Sandėliukas'],['#tabHistory','text','Istorija']];
   S.forEach(([sel,prop,lt])=>{const el=$(sel);if(!el)return;if(prop==='text'){const tn=[...el.childNodes].reverse().find(n=>n.nodeType===3&&n.textContent.trim());if(tn)tn.textContent=t(lt);else el.textContent=t(lt)}else el.setAttribute(prop,t(lt))});
-  document.title=t('Sandėliukas')}
+  document.title=t('APP');const mf=document.querySelector('link[rel="manifest"]');if(mf)mf.href='./manifest-en.webmanifest'}
 load();render();
 idb.open().then(()=>idb.all()).then(render).catch(()=>{});
 if(SITE&&'serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));

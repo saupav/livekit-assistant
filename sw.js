@@ -1,6 +1,6 @@
 // Sandėliukas service worker: app works offline, product photos and fonts are cached after first view
-const V='sandeliukas-v4', RT='sandeliukas-rt-v1';
-const CORE=['./','./index.html','./zxing.min.js','./manifest.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png'];
+const V='sandeliukas-v5', RT='sandeliukas-rt-v1';
+const CORE=['./','./index.html','./zxing.min.js','./manifest.webmanifest','./manifest-en.webmanifest','./icon-192.png','./icon-512.png','./apple-touch-icon.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V&&k!==RT).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',e=>{
