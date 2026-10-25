@@ -360,12 +360,49 @@ textarea{width:100%;min-height:110px;border:1px solid var(--line);border-radius:
 (()=>{
 'use strict';
 const SITE=!!window.SANDELIUKAS_SITE;
+
+/* ---------- language ---------- */
+const EN={
+'Sandėliukas':'Pantry','Šaldytuvas':'Fridge','Šaldiklis':'Freezer','Istorija':'History',
+'be galiojimo datos':'no expiry date','pasibaigė prieš {n} d.':'expired {n} d. ago','galioja tik šiandien':'expires today','galioja iki rytojaus':'expires tomorrow','liko {n} d.':'{n} d. left','iki {d}':'until {d}',
+'Šiandien':'Today','Vakar':'Yesterday',
+'JAV / Kanada':'USA / Canada','Prancūzija':'France','Vokietija':'Germany','Japonija':'Japan','Rusija':'Russia','Estija':'Estonia','Latvija':'Latvia','Lietuva':'Lithuania','Ukraina':'Ukraine','Baltarusija':'Belarus','Jungtinė Karalystė':'United Kingdom','Graikija':'Greece','Belgija / Liuksemburgas':'Belgium / Luxembourg','Portugalija':'Portugal','Danija':'Denmark','Lenkija':'Poland','Rumunija':'Romania','Vengrija':'Hungary','Suomija':'Finland','Kinija':'China','Norvegija':'Norway','Švedija':'Sweden','Šveicarija':'Switzerland','Italija':'Italy','Ispanija':'Spain','Slovakija':'Slovakia','Čekija':'Czechia','Turkija':'Turkey','Nyderlandai':'Netherlands','Austrija':'Austria','Australija':'Australia','Knyga (ISBN)':'Book (ISBN)',
+'Sveriamas':'Weighed','prekės nr. {n}':'item no. {n}','{n} sk.':'{n} digits',
+'Telefone baigėsi vieta duomenims':'Your phone is out of storage space',
+'{n} produktai · {u} vnt.':'{n} products · {u} pcs','Tuščia. Nuskenuok pirmą produktą.':'Empty. Scan your first product.','Kas nupirkta, suvalgyta ir išmesta':'Bought, eaten and thrown away','Be interneto':'Offline',
+'Produktai':'Products','Vienetai':'Units','Pasibaigę / baigiasi':'Expired / expiring','Baigia galioti':'Expiring soon','Visi':'All',
+'Sandėliukas tuščias':'Your pantry is empty','Spausk žalią mygtuką apačioje ir nuskenuok produkto brūkšninį kodą.':'Tap the green button below and scan a product barcode.','Nieko nerasta pagal „{q}“.':'Nothing found for “{q}”.','{n} partijos':'{n} batches',' vnt.':' pcs','vnt.':'pcs',
+'Pavyzdžiai išvalyti':'Examples cleared','Rodomi pavyzdiniai produktai, kad matytum, kaip atrodo.':'Showing example products so you can see how it looks.','Išvalyti':'Clear',
+'Nupirkta vnt.':'Bought (pcs)','Suvalgyta':'Eaten','Išmesta':'Thrown away','Suvalgyta {e}, išmesta {t}':'Eaten {e}, thrown away {t}','Paskutinės 30 d.':'Last 30 days','Išmetama {w}% to, kas panaudota':'{w}% of what you use gets thrown away','Dar nėra panaudotų produktų':'No products used yet','Pirkimai':'Purchases','Istorija tuščia':'No history yet','Kai įdėsi ar išimsi produktą, jis atsiras čia.':'Products you add or take out will show up here.','{n} įr.':'{n} entries','Nupirkta iš viso':'Total bought',
+'Nukreipk kamerą į kitą produktą':'Point the camera at the next product','Nuskenuok kitą produktą iš lentynos':'Scan the next product from the shelf',
+'Neapdorotas':'Unprocessed','Kulinarinis ingredientas':'Culinary ingredient','Apdorotas':'Processed','Itin apdorotas':'Ultra-processed',
+'Kodas teisingas':'Valid code','Neteisingas kontrolinis sk.':'Bad check digit',
+'Sveriamas produktas':'Weighed product','Ieškoma Open Food Facts duombazėje…':'Looking up in Open Food Facts…',
+'Kita nuotrauka':'Change photo','Savo nuotrauka':'Own photo','Nufotografuoti':'Take photo',
+'Sveriamas produktas: kaip pavadinti? Kitą kartą atpažins pats.':'Weighed product: what is it? Next time it will be recognised automatically.','Nėra ryšio su duombaze. Kaip pavadinti produktą?':'No connection to the database. What is this product?','Duombazėje nerasta. Kaip pavadinti produktą?':'Not in the database. What is this product?','pvz. Vištienos krūtinėlė':'e.g. Chicken breast',
+'Jau turi sandėliuke':'Already at home','be datos':'no date','Išmesti':'Toss','Šito sandėliuke neturi':'Not in your pantry','Galima drąsiai pirkti.':'Safe to buy.','Nuskenuotas, bet neįrašytas.':'Scanned, but not recorded.',
+'Suvalgiau 1':'Ate 1','Išmečiau 1':'Tossed 1','Nurašoma nuo tos partijos, kurios galiojimas baigiasi anksčiausiai.':'Taken from the batch that expires first.',
+'Kiekis':'Quantity','Mažiau':'Less','Daugiau':'More','Kur dėsi':'Where it goes','Galioja iki (nebūtina)':'Best before (optional)','+3 d.':'+3 d.','+7 d.':'+7 d.','+1 mėn.':'+1 mo.','Atmesti':'Dismiss','Įdėti {n} vnt.':'Add {n} pcs','Nupirkau dar…':'Bought more…','Nupirkau dar':'Bought more','Įdėti į sandėliuką':'Add to pantry',
+'Energinė vertė':'Energy','Riebalai':'Fat','iš jų sočiosios':'of which saturates','Angliavandeniai':'Carbohydrates','iš jų cukrūs':'of which sugars','Baltymai':'Protein','Druska':'Salt','Sudėtis':'Ingredients','Kategorija: {c}':'Category: {c}',
+'Visa informacija':'Full details','Pridėti produktą į duombazę':'Add this product to the database','Open Food Facts: atvira, nemokama':'Open Food Facts: open, free','Ištrinti savo nuotrauką':'Delete my photo','Pašalinti visus {n} vnt. iš sandėliuko':'Remove all {n} pcs from pantry','Pavyzdinis produktas, duomenys sugalvoti.':'Example product, data is made up.','Produktas {n}':'Product {n}',
+'Pirmiausia įrašyk pavadinimą':'Enter a name first','Įdėta: {n} vnt.':'Added: {n} pcs','Skanaus! −1 vnt.':'Enjoy! −1 pc','Pašalinta iš sandėliuko':'Removed from pantry',
+'Nuotrauka rodoma, bet neišsaugota šiame režime':'Photo shown, but cannot be saved in this mode','Nepavyko nuskaityti nuotraukos':'Could not read the photo',
+'Parduotuvėje: nuskenuok ir pamatysi, ar jau turi namie':'Shopping: scan to see if you already have it at home','Sandėliuke: nuskenuok, tada suvalgyk, išmesk ar patikrink datą':'At home: scan, then eat it, toss it or check the date','Laikyk kodą 15–20 cm nuo kameros, kad vaizdas būtų ryškus':'Hold the code 15–20 cm from the camera so it stays sharp',
+'Leidimas kamerai nesuteiktas. Leisk kamerą naršyklės nustatymuose arba įvesk kodą ranka.':'Camera permission denied. Allow the camera in your browser settings or type the code.','Skaitytuvas neįsikėlė. Įvesk kodą ranka.':'The scanner failed to load. Type the code instead.','Nepavyko įjungti kameros. Įvesk kodą ranka.':'Could not start the camera. Type the code instead.','Šioje peržiūroje kamera neleidžiama, svetainėje ji veiks. Kol kas įvesk kodą ranka arba paspausk pavyzdinį kodą.':'The camera is blocked in this preview; it works on the real site. For now type a code or tap an example code.',
+'Nuskenuota':'Scanned',
+'Nustatymai':'Settings','Kalba':'Language','Automatiškai':'Automatic','Atsarginė kopija':'Backup','Duomenys ir nuotraukos saugomi tik šiame telefone. Kartais pasidaryk kopiją.':'Data and photos are stored only on this phone. Make a backup now and then.','Kopijuoti':'Copy','Atsisiųsti failą':'Download file','Įklijuok anksčiau nukopijuotus duomenis ir spausk „Atkurti“':'Paste previously copied data and tap “Restore”','Duomenys':'Data','Atkurti iš failo':'Restore from file','Atkurti iš teksto':'Restore from text','Išvalyti viską':'Clear everything','Ištrins sandėliuką, istoriją ir nuotraukas šiame įrenginyje.':'Deletes the pantry, history and photos on this device.','Ne':'No','Taip, ištrinti':'Yes, delete','Produktų informacija ir nuotraukos:':'Product information and photos:',
+'Duomenys atkurti':'Data restored','Netinkami duomenys. Įklijuok visą kopiją.':'Invalid data. Paste the whole backup.','Nukopijuota':'Copied','Pažymėta, nukopijuok':'Selected, now copy it','Viskas išvalyta':'Everything cleared',
+'Ieškoti sandėliuke':'Search pantry','Skenuoti brūkšninį kodą':'Scan a barcode','Kamera nepasiekiama':'Camera unavailable','Įvesk kodą ranka žemiau.':'Type the code below.','Perku':'Shopping','Tikrinu':'Checking','Priartinti':'Zoom','Žibintuvėlis':'Flashlight','Uždaryti':'Close','Nukreipk kamerą į brūkšninį kodą':'Point the camera at a barcode','Arba įvesk kodą':'Or type the code','Brūkšninis kodas':'Barcode','Ieškoti':'Search','Atšaukti':'Undo','Filtras':'Filter','Istorijos filtras':'History filter','Režimas':'Mode'};
+const LANG=(()=>{try{const p=JSON.parse(localStorage.getItem('sandeliukas.prefs')||'{}');if(p.lang==='lt'||p.lang==='en')return p.lang}catch(e){}return /^lt/i.test(navigator.language||'')?'lt':'en'})();
+const LOC=LANG==='lt'?'lt-LT':'en-GB';
+document.documentElement.lang=LANG;
+function t(s,v){let r=LANG==='en'?(EN[s]??s):s;if(v)for(const k in v)r=r.split('{'+k+'}').join(v[k]);return r}
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid=()=>Math.random().toString(36).slice(2,9)+Date.now().toString(36);
 const DAY=864e5, LS='sandeliukas.v1', LSP='sandeliukas.prefs';
 const LOCS=[{id:'pantry',label:'Sandėliukas'},{id:'fridge',label:'Šaldytuvas'},{id:'freezer',label:'Šaldiklis'}];
-const locLabel=id=>(LOCS.find(l=>l.id===id)||LOCS[0]).label;
+const locLabel=id=>t((LOCS.find(l=>l.id===id)||LOCS[0]).label);
 const KIND={buy:'+',eat:'✓',toss:'✕',remove:'−'};
 
 /* ---------- icons for placeholders ---------- */
@@ -398,13 +435,13 @@ const initial=n=>esc(((n||'?').trim().match(/[\p{L}\p{N}]/u)||['?'])[0].toUpperC
 const today0=()=>{const d=new Date();d.setHours(0,0,0,0);return d.getTime()};
 const localIso=n=>{const d=new Date(today0()+n*DAY);const p=x=>String(x).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`};
 const daysLeft=iso=>iso?Math.round((new Date(iso+'T00:00:00')-today0())/DAY):null;
-const fmtDay=iso=>new Intl.DateTimeFormat('lt-LT',{month:'short',day:'numeric'}).format(new Date(iso+'T00:00:00'));
+const fmtDay=iso=>new Intl.DateTimeFormat(LOC,{month:'short',day:'numeric'}).format(new Date(iso+'T00:00:00'));
 function expState(iso){const n=daysLeft(iso);if(n===null)return'none';if(n<0)return'bad';if(n<=3)return'warn';return'ok'}
-function expLabel(iso){const n=daysLeft(iso);if(n===null)return'be galiojimo datos';if(n<0)return`pasibaigė prieš ${-n} d.`;if(n===0)return'galioja tik šiandien';if(n===1)return'galioja iki rytojaus';if(n<=30)return`liko ${n} d.`;return`iki ${fmtDay(iso)}`}
-const fmtTime=ts=>new Intl.DateTimeFormat('lt-LT',{hour:'2-digit',minute:'2-digit'}).format(ts);
+function expLabel(iso){const n=daysLeft(iso);if(n===null)return t('be galiojimo datos');if(n<0)return t('pasibaigė prieš {n} d.',{n:-n});if(n===0)return t('galioja tik šiandien');if(n===1)return t('galioja iki rytojaus');if(n<=30)return t('liko {n} d.',{n});return t('iki {d}',{d:fmtDay(iso)})}
+const fmtTime=ts=>new Intl.DateTimeFormat(LOC,{hour:'2-digit',minute:'2-digit'}).format(ts);
 function dayHeading(ts){const d=new Date(ts);d.setHours(0,0,0,0);const diff=Math.round((today0()-d)/DAY);
-  if(diff===0)return'Šiandien';if(diff===1)return'Vakar';
-  return new Intl.DateTimeFormat('lt-LT',{weekday:'long',month:'long',day:'numeric'}).format(d)}
+  if(diff===0)return t('Šiandien');if(diff===1)return t('Vakar');
+  return new Intl.DateTimeFormat(LOC,{weekday:'long',month:'long',day:'numeric'}).format(d)}
 
 /* ---------- barcode facts ---------- */
 function checkDigitOk(code){if(!/^\d{8}$|^\d{12,14}$/.test(code))return null;const ds=code.split('').map(Number);const chk=ds.pop();
@@ -417,13 +454,13 @@ const GS1=[[0,19,'JAV / Kanada'],[30,37,'Prancūzija'],[40,44,'Vokietija'],[45,4
  [560,560,'Portugalija'],[57,57,'Danija'],[590,590,'Lenkija'],[594,594,'Rumunija'],[599,599,'Vengrija'],[64,64,'Suomija'],[69,69,'Kinija'],[70,70,'Norvegija'],[73,73,'Švedija'],
  [76,76,'Šveicarija'],[80,83,'Italija'],[84,84,'Ispanija'],[858,858,'Slovakija'],[859,859,'Čekija'],[868,869,'Turkija'],[87,87,'Nyderlandai'],[90,91,'Austrija'],[93,93,'Australija'],[978,979,'Knyga (ISBN)']];
 function gs1(code){
-  if(isWeighed(code))return{kind:'Sveriamas',reg:'prekės nr. '+code.slice(2,7)};
-  if(code.length===12)return{kind:'UPC-A',reg:'JAV / Kanada'};
+  if(isWeighed(code))return{kind:t('Sveriamas'),reg:t('prekės nr. {n}',{n:code.slice(2,7)})};
+  if(code.length===12)return{kind:'UPC-A',reg:t('JAV / Kanada')};
   if(code.length===8)return{kind:'EAN-8',reg:null};
-  if(code.length!==13)return{kind:code.length+' sk.',reg:null};
+  if(code.length!==13)return{kind:t('{n} sk.',{n:code.length}),reg:null};
   const p3=+code.slice(0,3),p2=+code.slice(0,2);
-  for(const [a,b,n] of GS1)if(a>=100&&p3>=a&&p3<=b)return{kind:'EAN-13',reg:'GS1: '+n};
-  for(const [a,b,n] of GS1)if(a<100&&p2>=a&&p2<=b)return{kind:'EAN-13',reg:'GS1: '+n};
+  for(const [a,b,n] of GS1)if(a>=100&&p3>=a&&p3<=b)return{kind:'EAN-13',reg:'GS1: '+t(n)};
+  for(const [a,b,n] of GS1)if(a<100&&p2>=a&&p2<=b)return{kind:'EAN-13',reg:'GS1: '+t(n)};
   return{kind:'EAN-13',reg:null}}
 
 /* ---------- storage ---------- */
@@ -439,7 +476,7 @@ function load(){
 function migrate(){db.items.forEach(it=>{
   if(!it.key)it.key=keyOf(it.code);
   if(!it.batches){it.batches=[{id:uid(),qty:it.qty||1,expiry:it.expiry||'',addedAt:it.addedAt||Date.now()}];delete it.qty;delete it.expiry}})}
-function save(){try{localStorage.setItem(LS,JSON.stringify(db));return true}catch(e){toast('Telefone baigėsi vieta duomenims',false);return false}}
+function save(){try{localStorage.setItem(LS,JSON.stringify(db));return true}catch(e){toast(t('Telefone baigėsi vieta duomenims'),false);return false}}
 function savePrefs(){try{localStorage.setItem(LSP,JSON.stringify(prefs))}catch(e){}}
 const qtyOf=it=>it.batches.reduce((a,b)=>a+b.qty,0);
 const expOf=it=>it.batches.map(b=>b.expiry).filter(Boolean).sort()[0]||'';
@@ -534,7 +571,7 @@ const findItem=key=>db.items.find(i=>i.key===key);
 function addItem(code,info,qty,loc,expiry,name){
   snapshot();
   const key=keyOf(code);let it=findItem(key);
-  const nm=name||(it&&it.name)||info.name||'Produktas '+code.slice(-4);
+  const nm=name||(it&&it.name)||info.name||t('Produktas {n}',{n:code.slice(-4)});
   if(it){
     const b=it.batches.find(b=>(b.expiry||'')===(expiry||''));
     if(b)b.qty+=qty;else it.batches.push({id:uid(),qty,expiry:expiry||'',addedAt:Date.now()});
@@ -579,61 +616,61 @@ let filter='all',q='',histFilter='all',view='pantry';
 function render(){renderPantry();renderHistory();renderHeader()}
 function renderHeader(){
   const units=db.items.reduce((a,b)=>a+qtyOf(b),0);
-  $('#title').textContent=view==='pantry'?'Sandėliukas':'Istorija';
+  $('#title').textContent=view==='pantry'?t('Sandėliukas'):t('Istorija');
   $('#subtitle').innerHTML=(view==='pantry'
-    ?(db.items.length?`${db.items.length} produktai · ${units} vnt.`:'Tuščia. Nuskenuok pirmą produktą.')
-    :'Kas nupirkta, suvalgyta ir išmesta')+(navigator.onLine===false?'<span class="offline">Be interneto</span>':'');
+    ?(db.items.length?t('{n} produktai · {u} vnt.',{n:db.items.length,u:units}):t('Tuščia. Nuskenuok pirmą produktą.'))
+    :t('Kas nupirkta, suvalgyta ir išmesta'))+(navigator.onLine===false?'<span class="offline">'+t('Be interneto')+'</span>':'');
 }
 window.addEventListener('online',renderHeader);window.addEventListener('offline',renderHeader);
 function renderPantry(){
   const items=db.items;
   const soon=items.filter(i=>expState(expOf(i))==='warn').length, gone=items.filter(i=>expState(expOf(i))==='bad').length;
   $('#stats').innerHTML=`
-    <div class="stat"><b>${items.length}</b><span>Produktai</span></div>
-    <div class="stat"><b>${items.reduce((a,b)=>a+qtyOf(b),0)}</b><span>Vienetai</span></div>
-    <div class="stat ${soon+gone?'alert':''} ${gone?'bad':''}"><b>${soon+gone}</b><span>${gone?'Pasibaigę / baigiasi':'Baigia galioti'}</span></div>`;
+    <div class="stat"><b>${items.length}</b><span>${t('Produktai')}</span></div>
+    <div class="stat"><b>${items.reduce((a,b)=>a+qtyOf(b),0)}</b><span>${t('Vienetai')}</span></div>
+    <div class="stat ${soon+gone?'alert':''} ${gone?'bad':''}"><b>${soon+gone}</b><span>${gone?t('Pasibaigę / baigiasi'):t('Baigia galioti')}</span></div>`;
   $('#demoBanner').hidden=!items.some(i=>i.demo)&&!db.history.some(h=>h.demo);
   const counts={all:items.length,soon:soon+gone};LOCS.forEach(l=>counts[l.id]=items.filter(i=>i.loc===l.id).length);
-  const chips=[['all','Visi'],...LOCS.map(l=>[l.id,l.label]),['soon','Baigia galioti']];
+  const chips=[['all',t('Visi')],...LOCS.map(l=>[l.id,t(l.label)]),['soon',t('Baigia galioti')]];
   $('#locChips').innerHTML=chips.map(([id,l])=>`<button class="chip" data-f="${id}" aria-pressed="${filter===id}">${l} <span class="n">${counts[id]}</span></button>`).join('');
   let list=items.filter(i=>filter==='all'||(filter==='soon'?['warn','bad'].includes(expState(expOf(i))):i.loc===filter));
   if(q){const s=q.toLowerCase();list=list.filter(i=>(i.name+' '+i.brand+' '+i.code).toLowerCase().includes(s))}
   list.sort((a,b)=>{const x=expOf(a)||'9999',y=expOf(b)||'9999';return x<y?-1:x>y?1:a.name.localeCompare(b.name,'lt')});
-  if(!items.length){$('#shelf').innerHTML=`<div class="empty"><svg class="i" viewBox="0 0 24 24" style="width:38px;height:38px"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M7 8v8M10 8v8M13 8v8M17 8v8"/></svg><h3>Sandėliukas tuščias</h3>Spausk žalią mygtuką apačioje ir nuskenuok produkto brūkšninį kodą.</div>`;return}
-  if(!list.length){$('#shelf').innerHTML=`<div class="empty">Nieko nerasta pagal „${esc(q||chips.find(c=>c[0]===filter)[1])}“.</div>`;return}
+  if(!items.length){$('#shelf').innerHTML=`<div class="empty"><svg class="i" viewBox="0 0 24 24" style="width:38px;height:38px"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3M7 8v8M10 8v8M13 8v8M17 8v8"/></svg><h3>${t('Sandėliukas tuščias')}</h3>${t('Spausk žalią mygtuką apačioje ir nuskenuok produkto brūkšninį kodą.')}</div>`;return}
+  if(!list.length){$('#shelf').innerHTML=`<div class="empty">${t('Nieko nerasta pagal „{q}“.',{q:esc(q||chips.find(c=>c[0]===filter)[1])})}</div>`;return}
   $('#shelf').innerHTML=`<div class="shelf">${list.map(it=>{const e=expOf(it),st=expState(e);return`
     <button class="row" data-code="${esc(it.code)}">
       ${tile(it.key,it.name,'thumb','sm')}
       <div style="min-width:0"><div class="name">${esc(it.name)}</div>
-        <div class="meta"><span class="dot ${st}"></span><span class="exp ${st}">${expLabel(e)}</span><span>· ${locLabel(it.loc)}${it.batches.length>1?` · ${it.batches.length} partijos`:''}</span></div></div>
-      <span class="tag">${qtyOf(it)}<small> vnt.</small></span>
+        <div class="meta"><span class="dot ${st}"></span><span class="exp ${st}">${expLabel(e)}</span><span>· ${locLabel(it.loc)}${it.batches.length>1?' · '+t('{n} partijos',{n:it.batches.length}):''}</span></div></div>
+      <span class="tag">${qtyOf(it)}<small>${t(' vnt.')}</small></span>
     </button>`}).join('')}</div>`;
 }
 $('#locChips').onclick=e=>{const b=e.target.closest('[data-f]');if(!b)return;filter=b.dataset.f;renderPantry()};
 $('#q').oninput=e=>{q=e.target.value.trim();renderPantry()};
 $('#shelf').onclick=e=>{const r=e.target.closest('[data-code]');if(r)openProduct(r.dataset.code,{source:'pantry'})};
 $('#btnClearDemo').onclick=()=>{snapshot();db.items=db.items.filter(i=>!i.demo);db.history=db.history.filter(h=>!h.demo);
-  Object.keys(db.cache).forEach(k=>{if(db.cache[k].demo)delete db.cache[k]});save();render();toast('Pavyzdžiai išvalyti')};
+  Object.keys(db.cache).forEach(k=>{if(db.cache[k].demo)delete db.cache[k]});save();render();toast(t('Pavyzdžiai išvalyti'))};
 
 /* ---------- history ---------- */
 function renderHistory(){
   const last=db.history.filter(h=>h.ts>=Date.now()-30*DAY);
-  const sum=t=>last.filter(h=>h.type===t).reduce((a,b)=>a+b.qty,0);
-  const b=sum('buy'),e=sum('eat'),t=sum('toss'),used=e+t,waste=used?Math.round(t/used*100):0;
+  const sum=k=>last.filter(h=>h.type===k).reduce((a,b)=>a+b.qty,0);
+  const b=sum('buy'),e=sum('eat'),tt=sum('toss'),used=e+tt,waste=used?Math.round(tt/used*100):0;
   $('#summary').innerHTML=`
-    <div class="nums"><div><b>${b}</b><span>Nupirkta vnt.</span></div><div><b style="color:var(--ok)">${e}</b><span>Suvalgyta</span></div><div><b style="color:var(--bad)">${t}</b><span>Išmesta</span></div></div>
-    <div class="bar" role="img" aria-label="Suvalgyta ${e}, išmesta ${t}">${used?`<i style="width:${100-waste}%;background:var(--ok)"></i><i style="width:${waste}%;background:var(--bad)"></i>`:''}</div>
-    <div class="legend"><span>Paskutinės 30 d.</span><span>${used?`Išmetama ${waste}% to, kas panaudota`:'Dar nėra panaudotų produktų'}</span></div>`;
-  const chips=[['all','Visi'],['buy','Pirkimai'],['eat','Suvalgyta'],['toss','Išmesta']];
+    <div class="nums"><div><b>${b}</b><span>${t('Nupirkta vnt.')}</span></div><div><b style="color:var(--ok)">${e}</b><span>${t('Suvalgyta')}</span></div><div><b style="color:var(--bad)">${tt}</b><span>${t('Išmesta')}</span></div></div>
+    <div class="bar" role="img" aria-label="${t('Suvalgyta {e}, išmesta {t}',{e,t:tt})}">${used?`<i style="width:${100-waste}%;background:var(--ok)"></i><i style="width:${waste}%;background:var(--bad)"></i>`:''}</div>
+    <div class="legend"><span>${t('Paskutinės 30 d.')}</span><span>${used?t('Išmetama {w}% to, kas panaudota',{w:waste}):t('Dar nėra panaudotų produktų')}</span></div>`;
+  const chips=[['all',t('Visi')],['buy',t('Pirkimai')],['eat',t('Suvalgyta')],['toss',t('Išmesta')]];
   $('#histChips').innerHTML=chips.map(([id,l])=>`<button class="chip" data-h="${id}" aria-pressed="${histFilter===id}">${l}</button>`).join('');
   const list=db.history.filter(h=>histFilter==='all'||h.type===histFilter||(histFilter==='toss'&&h.type==='remove')).sort((a,b)=>b.ts-a.ts);
-  if(!list.length){$('#receipts').innerHTML=`<div class="empty"><h3>Istorija tuščia</h3>Kai įdėsi ar išimsi produktą, jis atsiras čia.</div>`;return}
+  if(!list.length){$('#receipts').innerHTML=`<div class="empty"><h3>${t('Istorija tuščia')}</h3>${t('Kai įdėsi ar išimsi produktą, jis atsiras čia.')}</div>`;return}
   const groups=new Map();list.forEach(h=>{const d=new Date(h.ts);d.setHours(0,0,0,0);const k=d.getTime();if(!groups.has(k))groups.set(k,[]);groups.get(k).push(h)});
   $('#receipts').innerHTML=[...groups].map(([k,hs])=>{
     const bought=hs.filter(h=>h.type==='buy').reduce((a,b)=>a+b.qty,0);
-    return`<div class="receipt"><h4><span>${esc(dayHeading(k))}</span><span>${hs.length} įr.</span></h4>
+    return`<div class="receipt"><h4><span>${esc(dayHeading(k))}</span><span>${t('{n} įr.',{n:hs.length})}</span></h4>
     ${hs.map(h=>`<button class="rline" data-code="${esc(h.code)}"><span class="t">${fmtTime(h.ts)}</span><span class="k ${h.type}">${KIND[h.type]}</span><span class="nm">${esc(h.name)}</span><span>${h.qty}×</span></button>`).join('')}
-    ${bought?`<div class="rtotal"><span>Nupirkta iš viso</span><span>${bought} vnt.</span></div>`:''}</div>`}).join('');
+    ${bought?`<div class="rtotal"><span>${t('Nupirkta iš viso')}</span><span>${bought}${t(' vnt.')}</span></div>`:''}</div>`}).join('');
 }
 $('#histChips').onclick=e=>{const b=e.target.closest('[data-h]');if(!b)return;histFilter=b.dataset.h;renderHistory()};
 $('#receipts').onclick=e=>{const r=e.target.closest('[data-code]');if(r)openProduct(r.dataset.code,{source:'pantry'})};
@@ -653,21 +690,21 @@ function closeSheet(){
   $('#scrim').classList.remove('open');$('#sheet').classList.remove('open');
   setTimeout(()=>{if(!sheetCtx){$('#scrim').hidden=true;$('#sheet').hidden=true}},230);
   const wasScan=sheetCtx&&sheetCtx.source==='scan';sheetCtx=null;
-  if(wasScan&&!$('#scanner').hidden){scan.busy=false;setStatus(prefs.mode==='shop'?'Nukreipk kamerą į kitą produktą':'Nuskenuok kitą produktą iš lentynos')}
+  if(wasScan&&!$('#scanner').hidden){scan.busy=false;setStatus(prefs.mode==='shop'?t('Nukreipk kamerą į kitą produktą'):t('Nuskenuok kitą produktą iš lentynos'))}
 }
 $('#scrim').onclick=closeSheet;$('#btnSheetClose').onclick=closeSheet;
 
 function nsStrip(g){return`<div class="ns" aria-label="Nutri-Score ${g.toUpperCase()}"><span class="lbl">Nutri<br>Score</span>${'abcde'.split('').map(l=>`<i class="${l===g?'on':''} ${l==='c'?'c':''}" style="background:var(--ns-${l})">${l.toUpperCase()}</i>`).join('')}</div>`}
 const NOVA={1:['Neapdorotas','var(--ns-a)',''],2:['Kulinarinis ingredientas','var(--ns-c)','dk'],3:['Apdorotas','var(--ns-d)',''],4:['Itin apdorotas','var(--ns-e)','']};
-const fmtN=v=>v===null||v===undefined||isNaN(v)?'—':(v<1&&v>0?v.toFixed(2):v<10?(+v.toFixed(1)).toString():Math.round(v).toString()).replace('.',',');
+const fmtN=v=>v===null||v===undefined||isNaN(v)?'—':(v<1&&v>0?v.toFixed(2):v<10?(+v.toFixed(1)).toString():Math.round(v).toString()).replace('.',LANG==='lt'?',':'.');
 function codeBar(code){const g=gs1(code),ok=checkDigitOk(code);return`<div class="codebar"><div><div class="mono">${esc(code)}</div><small>${esc(g.kind)}${g.reg?' · '+esc(g.reg):''}</small></div>
-  ${ok===null?'':ok?'<span class="ck ok">Kodas teisingas</span>':'<span class="ck bad">Neteisingas kontrolinis sk.</span>'}</div>`}
+  ${ok===null?'':ok?'<span class="ck ok">'+t('Kodas teisingas')+'</span>':'<span class="ck bad">'+t('Neteisingas kontrolinis sk.')+'</span>'}</div>`}
 
 async function openProduct(code,ctx){
   const key=keyOf(code);
   sheetCtx=Object.assign({code,key,qty:1,loc:null,expiry:'',name:''},ctx);
   openSheet(`<div class="hero skel"></div><div><div class="skel" style="height:24px;width:75%;margin-bottom:8px"></div><div class="skel" style="height:14px;width:40%"></div></div>
-    ${codeBar(code)}<p class="note">${isWeighed(code)?'Sveriamas produktas':'Ieškoma Open Food Facts duombazėje…'}</p>`);
+    ${codeBar(code)}<p class="note">${isWeighed(code)?t('Sveriamas produktas'):t('Ieškoma Open Food Facts duombazėje…')}</p>`);
   const info=await lookup(code);
   if(!sheetCtx||sheetCtx.code!==code)return;
   sheetCtx.info=info;
@@ -686,41 +723,41 @@ function renderProduct(){
   const needName=!it&&!info.name;
   const mode=c.source==='pantry'?'check':prefs.mode;
   let h=`<div style="position:relative">${tile(key,name||'?','hero','lg')}
-    <button class="photobtn" data-act="photo"><svg class="i" viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 1 2-2h2l2-2h6l2 2h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="13" r="3.5"/></svg>${photos[key]?'Kita nuotrauka':picFor(key,'lg')?'Savo nuotrauka':'Nufotografuoti'}</button></div>`;
-  h+=needName?`<div class="field"><label for="nameIn">${info.weighed?'Sveriamas produktas: kaip pavadinti? Kitą kartą atpažins pats.':info.error?'Nėra ryšio su duombaze. Kaip pavadinti produktą?':'Duombazėje nerasta. Kaip pavadinti produktą?'}</label><input class="namefield" id="nameIn" placeholder="pvz. Vištienos krūtinėlė" value="${esc(c.name)}" autocomplete="off"></div>`
-    :`<div class="ptitle"><h2>${esc(name)}</h2><div class="brand">${esc([info.brand||(it&&it.brand),info.quantity].filter(Boolean).join(' · ')||(info.weighed?'Sveriamas produktas':''))}</div></div>`;
+    <button class="photobtn" data-act="photo"><svg class="i" viewBox="0 0 24 24"><path d="M3 8a2 2 0 0 1 2-2h2l2-2h6l2 2h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="13" r="3.5"/></svg>${photos[key]?t('Kita nuotrauka'):picFor(key,'lg')?t('Savo nuotrauka'):t('Nufotografuoti')}</button></div>`;
+  h+=needName?`<div class="field"><label for="nameIn">${info.weighed?t('Sveriamas produktas: kaip pavadinti? Kitą kartą atpažins pats.'):info.error?t('Nėra ryšio su duombaze. Kaip pavadinti produktą?'):t('Duombazėje nerasta. Kaip pavadinti produktą?')}</label><input class="namefield" id="nameIn" placeholder="${t('pvz. Vištienos krūtinėlė')}" value="${esc(c.name)}" autocomplete="off"></div>`
+    :`<div class="ptitle"><h2>${esc(name)}</h2><div class="brand">${esc([info.brand||(it&&it.brand),info.quantity].filter(Boolean).join(' · ')||(info.weighed?t('Sveriamas produktas'):''))}</div></div>`;
   h+=codeBar(code);
   if(it){const e=expOf(it),st=expState(e),bs=[...it.batches].sort((a,b)=>(a.expiry||'9999')<(b.expiry||'9999')?-1:1);
-    h+=`<div class="have ${st==='bad'?'bad':st==='warn'?'warn':''}"><div class="hd"><div class="big">${qtyOf(it)}</div><p><b>Jau turi sandėliuke</b><br>${locLabel(it.loc)} · ${expLabel(e)}${e?` (${fmtDay(e)})`:''}</p></div>
-      ${bs.length>1?bs.map(b=>`<div class="batch"><span class="q">${b.qty} vnt.</span><span class="exp ${expState(b.expiry)}">${b.expiry?`iki ${fmtDay(b.expiry)} · ${expLabel(b.expiry)}`:'be datos'}</span><button data-act="tossBatch" data-b="${b.id}">Išmesti</button></div>`).join(''):''}</div>`}
-  else if(c.source==='scan')h+=`<div class="have none"><div class="hd"><div class="big" style="color:var(--muted)">0</div><p><b>Šito sandėliuke neturi</b><br>${mode==='shop'?'Galima drąsiai pirkti.':'Nuskenuotas, bet neįrašytas.'}</p></div></div>`;
+    h+=`<div class="have ${st==='bad'?'bad':st==='warn'?'warn':''}"><div class="hd"><div class="big">${qtyOf(it)}</div><p><b>${t('Jau turi sandėliuke')}</b><br>${locLabel(it.loc)} · ${expLabel(e)}${e?` (${fmtDay(e)})`:''}</p></div>
+      ${bs.length>1?bs.map(b=>`<div class="batch"><span class="q">${b.qty}${t(' vnt.')}</span><span class="exp ${expState(b.expiry)}">${b.expiry?t('iki {d}',{d:fmtDay(b.expiry)})+' · '+expLabel(b.expiry):t('be datos')}</span><button data-act="tossBatch" data-b="${b.id}">${t('Išmesti')}</button></div>`).join(''):''}</div>`}
+  else if(c.source==='scan')h+=`<div class="have none"><div class="hd"><div class="big" style="color:var(--muted)">0</div><p><b>${t('Šito sandėliuke neturi')}</b><br>${mode==='shop'?t('Galima drąsiai pirkti.'):t('Nuskenuotas, bet neįrašytas.')}</p></div></div>`;
 
-  const consume=it?`<div class="row2"><button class="btn eat" data-act="eat">Suvalgiau 1</button><button class="btn toss" data-act="toss">Išmečiau 1</button></div>${it.batches.length>1?'<p class="note">Nurašoma nuo tos partijos, kurios galiojimas baigiasi anksčiausiai.</p>':''}`:'';
-  const addInner=`<div class="field"><span class="lab">Kiekis</span><div class="stepper"><button data-act="dec" aria-label="Mažiau"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button><output id="qtyOut">${c.qty}</output><button data-act="inc" aria-label="Daugiau"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
-    <div class="field"><span class="lab">Kur dėsi</span><div class="seg">${LOCS.map(l=>`<button data-loc="${l.id}" aria-pressed="${c.loc===l.id}">${l.label}</button>`).join('')}</div></div>
-    <div class="field"><label for="expIn">Galioja iki (nebūtina)</label><div class="daterow"><input type="date" id="expIn" value="${esc(c.expiry)}">
-      <div class="seg"><button data-exp="3">+3 d.</button><button data-exp="7">+7 d.</button><button data-exp="30">+1 mėn.</button></div></div></div>
-    <div class="row2"><button class="btn ghost" data-act="reject">Atmesti</button><button class="btn primary" data-act="add">Įdėti ${c.qty} vnt.</button></div>`;
-  if(mode==='check'&&it)h+=consume+`<details class="panel" style="padding:0 14px"><summary style="padding:14px 0">Nupirkau dar…</summary><div style="display:flex;flex-direction:column;gap:12px;padding-bottom:14px">${addInner}</div></details>`;
-  else h+=`<div class="panel"><h3>${it?'Nupirkau dar':'Įdėti į sandėliuką'}</h3>${addInner}</div>`+consume;
+  const consume=it?`<div class="row2"><button class="btn eat" data-act="eat">${t('Suvalgiau 1')}</button><button class="btn toss" data-act="toss">${t('Išmečiau 1')}</button></div>${it.batches.length>1?'<p class="note">'+t('Nurašoma nuo tos partijos, kurios galiojimas baigiasi anksčiausiai.')+'</p>':''}`:'';
+  const addInner=`<div class="field"><span class="lab">${t('Kiekis')}</span><div class="stepper"><button data-act="dec" aria-label="${t('Mažiau')}"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button><output id="qtyOut">${c.qty}</output><button data-act="inc" aria-label="${t('Daugiau')}"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></div></div>
+    <div class="field"><span class="lab">${t('Kur dėsi')}</span><div class="seg">${LOCS.map(l=>`<button data-loc="${l.id}" aria-pressed="${c.loc===l.id}">${t(l.label)}</button>`).join('')}</div></div>
+    <div class="field"><label for="expIn">${t('Galioja iki (nebūtina)')}</label><div class="daterow"><input type="date" id="expIn" value="${esc(c.expiry)}">
+      <div class="seg"><button data-exp="3">${t('+3 d.')}</button><button data-exp="7">${t('+7 d.')}</button><button data-exp="30">${t('+1 mėn.')}</button></div></div></div>
+    <div class="row2"><button class="btn ghost" data-act="reject">${t('Atmesti')}</button><button class="btn primary" data-act="add">${t('Įdėti {n} vnt.',{n:c.qty})}</button></div>`;
+  if(mode==='check'&&it)h+=consume+`<details class="panel" style="padding:0 14px"><summary style="padding:14px 0">${t('Nupirkau dar…')}</summary><div style="display:flex;flex-direction:column;gap:12px;padding-bottom:14px">${addInner}</div></details>`;
+  else h+=`<div class="panel"><h3>${it?t('Nupirkau dar'):t('Įdėti į sandėliuką')}</h3>${addInner}</div>`+consume;
 
   const n=info.n||{};const hasN=Object.values(n).some(v=>v!==null&&v!==undefined);
-  if(info.nutri||info.nova)h+=`<div class="scores">${info.nutri?nsStrip(info.nutri):''}${info.nova&&NOVA[info.nova]?`<div class="nova"><b class="${NOVA[info.nova][2]}" style="background:${NOVA[info.nova][1]}">${info.nova}</b><span>NOVA<br>${NOVA[info.nova][0]}</span></div>`:''}</div>`;
+  if(info.nutri||info.nova)h+=`<div class="scores">${info.nutri?nsStrip(info.nutri):''}${info.nova&&NOVA[info.nova]?`<div class="nova"><b class="${NOVA[info.nova][2]}" style="background:${NOVA[info.nova][1]}">${info.nova}</b><span>NOVA<br>${t(NOVA[info.nova][0])}</span></div>`:''}</div>`;
   if(info.allergens&&info.allergens.length)h+=`<div class="allergens">${info.allergens.map(a=>`<span>${esc(a)}</span>`).join('')}</div>`;
   if(hasN)h+=`<div class="nutri"><h5>100 g / 100 ml</h5>
-    <div class="nrow"><span>Energinė vertė</span><span class="mono">${fmtN(n.kcal)} kcal</span></div>
-    <div class="nrow"><span>Riebalai</span><span class="mono">${fmtN(n.fat)} g</span></div>
-    <div class="nrow sub"><span>iš jų sočiosios</span><span class="mono">${fmtN(n.sat)} g</span></div>
-    <div class="nrow"><span>Angliavandeniai</span><span class="mono">${fmtN(n.carbs)} g</span></div>
-    <div class="nrow sub"><span>iš jų cukrūs</span><span class="mono">${fmtN(n.sugars)} g</span></div>
-    <div class="nrow"><span>Baltymai</span><span class="mono">${fmtN(n.protein)} g</span></div>
-    <div class="nrow"><span>Druska</span><span class="mono">${fmtN(n.salt)} g</span></div></div>`;
-  if(info.ingredients)h+=`<details><summary>Sudėtis</summary><p>${esc(info.ingredients)}</p></details>`;
-  if(info.categories&&info.categories.length)h+=`<p class="note">Kategorija: ${esc(info.categories.join(' › '))}</p>`;
-  if(!isWeighed(code))h+=`<a class="extlink" href="${offLink(code,info.db)}" target="_blank" rel="noopener">${info.found&&!info.demo?`<span>Visa informacija<small>${esc(info.dbName||'Open Food Facts')}</small></span>`:'<span>Pridėti produktą į duombazę<small>Open Food Facts: atvira, nemokama</small></span>'}<svg class="i" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></a>`;
-  if(photos[key])h+=`<button class="linkbtn" data-act="delPhoto">Ištrinti savo nuotrauką</button>`;
-  if(it)h+=`<button class="linkbtn" data-act="removeAll">Pašalinti visus ${qtyOf(it)} vnt. iš sandėliuko</button>`;
-  if(info.demo)h+=`<p class="note" style="text-align:center">Pavyzdinis produktas, duomenys sugalvoti.</p>`;
+    <div class="nrow"><span>${t('Energinė vertė')}</span><span class="mono">${fmtN(n.kcal)} kcal</span></div>
+    <div class="nrow"><span>${t('Riebalai')}</span><span class="mono">${fmtN(n.fat)} g</span></div>
+    <div class="nrow sub"><span>${t('iš jų sočiosios')}</span><span class="mono">${fmtN(n.sat)} g</span></div>
+    <div class="nrow"><span>${t('Angliavandeniai')}</span><span class="mono">${fmtN(n.carbs)} g</span></div>
+    <div class="nrow sub"><span>${t('iš jų cukrūs')}</span><span class="mono">${fmtN(n.sugars)} g</span></div>
+    <div class="nrow"><span>${t('Baltymai')}</span><span class="mono">${fmtN(n.protein)} g</span></div>
+    <div class="nrow"><span>${t('Druska')}</span><span class="mono">${fmtN(n.salt)} g</span></div></div>`;
+  if(info.ingredients)h+=`<details><summary>${t('Sudėtis')}</summary><p>${esc(info.ingredients)}</p></details>`;
+  if(info.categories&&info.categories.length)h+=`<p class="note">${t('Kategorija: {c}',{c:esc(info.categories.join(' › '))})}</p>`;
+  if(!isWeighed(code))h+=`<a class="extlink" href="${offLink(code,info.db)}" target="_blank" rel="noopener">${info.found&&!info.demo?`<span>${t('Visa informacija')}<small>${esc(info.dbName||'Open Food Facts')}</small></span>`:`<span>${t('Pridėti produktą į duombazę')}<small>${t('Open Food Facts: atvira, nemokama')}</small></span>`}<svg class="i" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9"/></svg></a>`;
+  if(photos[key])h+=`<button class="linkbtn" data-act="delPhoto">${t('Ištrinti savo nuotrauką')}</button>`;
+  if(it)h+=`<button class="linkbtn" data-act="removeAll">${t('Pašalinti visus {n} vnt. iš sandėliuko',{n:qtyOf(it)})}</button>`;
+  if(info.demo)h+=`<p class="note" style="text-align:center">${t('Pavyzdinis produktas, duomenys sugalvoti.')}</p>`;
   $('#sheetBody').innerHTML=h;
 }
 $('#sheetBody').addEventListener('click',e=>{
@@ -729,16 +766,16 @@ $('#sheetBody').addEventListener('click',e=>{
   if(b.dataset.loc){c.loc=b.dataset.loc;b.parentNode.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));return}
   if(b.dataset.exp){c.expiry=localIso(+b.dataset.exp);$('#expIn').value=c.expiry;return}
   const a=b.dataset.act;if(!a)return;
-  if(a==='inc'||a==='dec'){c.qty=Math.max(1,Math.min(99,c.qty+(a==='inc'?1:-1)));$('#qtyOut').textContent=c.qty;const add=$('[data-act="add"]');if(add)add.textContent=`Įdėti ${c.qty} vnt.`;return}
+  if(a==='inc'||a==='dec'){c.qty=Math.max(1,Math.min(99,c.qty+(a==='inc'?1:-1)));$('#qtyOut').textContent=c.qty;const add=$('[data-act="add"]');if(add)add.textContent=t('Įdėti {n} vnt.',{n:c.qty});return}
   if(a==='photo'){picking=true;$('#photoIn').value='';$('#photoIn').click();return}
   if(a==='delPhoto'){delete photos[c.key];idb.del(c.key);render();renderProduct();return}
   if(a==='reject'){closeSheet();return}
-  if(a==='add'){const inp=$('#nameIn');const nm=inp?inp.value.trim():'';if(inp&&!nm){inp.focus();inp.scrollIntoView({block:'center'});toast('Pirmiausia įrašyk pavadinimą',false);return}
-    addItem(c.code,c.info,c.qty,c.loc,c.expiry,nm);const q=c.qty;closeSheet();toast(`Įdėta: ${q} vnt.`);navigator.vibrate&&navigator.vibrate(20);return}
+  if(a==='add'){const inp=$('#nameIn');const nm=inp?inp.value.trim():'';if(inp&&!nm){inp.focus();inp.scrollIntoView({block:'center'});toast(t('Pirmiausia įrašyk pavadinimą'),false);return}
+    addItem(c.code,c.info,c.qty,c.loc,c.expiry,nm);const q=c.qty;closeSheet();toast(t('Įdėta: {n} vnt.',{n:q}));navigator.vibrate&&navigator.vibrate(20);return}
   if(a==='eat'||a==='toss'||a==='tossBatch'){
     takeOut(c.key,a==='tossBatch'?999:1,a==='eat'?'eat':'toss',b.dataset.b);
-    toast(a==='eat'?'Skanaus! −1 vnt.':'Išmesta');if(findItem(c.key))renderProduct();else closeSheet();return}
-  if(a==='removeAll'){removeAll(c.key);toast('Pašalinta iš sandėliuko');closeSheet()}
+    toast(a==='eat'?t('Skanaus! −1 vnt.'):t('Išmesta'));if(findItem(c.key))renderProduct();else closeSheet();return}
+  if(a==='removeAll'){removeAll(c.key);toast(t('Pašalinta iš sandėliuko'));closeSheet()}
 });
 $('#sheetBody').addEventListener('input',e=>{
   if(!sheetCtx)return;
@@ -759,9 +796,9 @@ $('#photoIn').addEventListener('cancel',()=>{picking=false});
 $('#photoIn').onchange=async e=>{picking=false;
   const f=e.target.files&&e.target.files[0];const c=sheetCtx;if(!f||!c)return;
   try{const d=await shrink(f);photos[c.key]=d;const ok=await idb.put(c.key,d);
-    if(!ok)toast('Nuotrauka rodoma, bet neišsaugota šiame režime',false);
+    if(!ok)toast(t('Nuotrauka rodoma, bet neišsaugota šiame režime'),false);
     render();if(sheetCtx&&sheetCtx.key===c.key)renderProduct()}
-  catch(err){toast('Nepavyko nuskaityti nuotraukos',false)}
+  catch(err){toast(t('Nepavyko nuskaityti nuotraukos'),false)}
 };
 
 /* ---------- scanner ---------- */
@@ -769,7 +806,7 @@ const scan={stream:null,timer:null,reader:null,busy:false,last:'',lastAt:0,wake:
 const WANT=['ean_13','ean_8','upc_a','upc_e','code_128'];
 function setStatus(html){$('#scanStatus').innerHTML=html}
 function setMode(m){prefs.mode=m;savePrefs();$('#modeShop').setAttribute('aria-pressed',m==='shop');$('#modeCheck').setAttribute('aria-pressed',m==='check');
-  setStatus((m==='shop'?'Parduotuvėje: nuskenuok ir pamatysi, ar jau turi namie':'Sandėliuke: nuskenuok, tada suvalgyk, išmesk ar patikrink datą')+'<br><small style="opacity:.75">Laikyk kodą 15–20 cm nuo kameros, kad vaizdas būtų ryškus</small>')}
+  setStatus((m==='shop'?t('Parduotuvėje: nuskenuok ir pamatysi, ar jau turi namie'):t('Sandėliuke: nuskenuok, tada suvalgyk, išmesk ar patikrink datą'))+'<br><small style="opacity:.75">'+t('Laikyk kodą 15–20 cm nuo kameros, kad vaizdas būtų ryškus')+'</small>')}
 $('#modeShop').onclick=()=>setMode('shop');$('#modeCheck').onclick=()=>setMode('check');
 async function startScanner(){
   $('#scanner').hidden=false;$('#camErr').hidden=true;$('#vf').hidden=false;document.body.style.overflow='hidden';
@@ -819,9 +856,9 @@ async function startScanner(){
     setupTorch();
   }catch(e){
     $('#camErr').hidden=false;$('#vf').hidden=true;
-    $('#camErrMsg').textContent=e&&e.name==='NotAllowedError'?'Leidimas kamerai nesuteiktas. Leisk kamerą naršyklės nustatymuose arba įvesk kodą ranka.'
-      :e&&e.message==='noscanner'?'Skaitytuvas neįsikėlė. Įvesk kodą ranka.'
-      :SITE?'Nepavyko įjungti kameros. Įvesk kodą ranka.':'Šioje peržiūroje kamera neleidžiama, svetainėje ji veiks. Kol kas įvesk kodą ranka arba paspausk pavyzdinį kodą.';
+    $('#camErrMsg').textContent=e&&e.name==='NotAllowedError'?t('Leidimas kamerai nesuteiktas. Leisk kamerą naršyklės nustatymuose arba įvesk kodą ranka.')
+      :e&&e.message==='noscanner'?t('Skaitytuvas neįsikėlė. Įvesk kodą ranka.')
+      :SITE?t('Nepavyko įjungti kameros. Įvesk kodą ranka.'):t('Šioje peržiūroje kamera neleidžiama, svetainėje ji veiks. Kol kas įvesk kodą ranka arba paspausk pavyzdinį kodą.');
     setStatus('');
   }
 }
@@ -858,7 +895,7 @@ function onCode(raw){
   scan.busy=true;scan.last=code;scan.lastAt=Date.now();
   navigator.vibrate&&navigator.vibrate(40);
   $('#vf').classList.add('hit');setTimeout(()=>$('#vf').classList.remove('hit'),500);
-  setStatus(`Nuskenuota <b class="mono">${esc(code)}</b>`);
+  setStatus(`${t('Nuskenuota')} <b class="mono">${esc(code)}</b>`);
   openProduct(code,{source:'scan'});
 }
 $('#btnScan').onclick=startScanner;$('#btnCloseScan').onclick=()=>{if(sheetCtx)closeSheet();stopScanner()};
@@ -871,19 +908,21 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(sheetCtx)closeSh
 /* ---------- settings ---------- */
 $('#btnSettings').onclick=()=>{
   sheetCtx={source:'settings'};
-  openSheet(`<h2 style="font-family:var(--f-display);margin:6px 0 0;font-size:24px">Nustatymai</h2>
-    <div class="panel"><h3>Atsarginė kopija</h3><p class="note">Duomenys ir nuotraukos saugomi tik šiame telefone. Kartais pasidaryk kopiją.</p>
-      <div class="row2"><button class="btn line" id="btnExport">Kopijuoti</button>${SITE?'<button class="btn line" id="btnDl">Atsisiųsti failą</button>':''}</div>
-      <textarea id="ioText" placeholder="Įklijuok anksčiau nukopijuotus duomenis ir spausk „Atkurti“" aria-label="Duomenys"></textarea>
-      ${SITE?'<label class="btn ghost" style="cursor:pointer">Atkurti iš failo<input type="file" id="fileIn" accept="application/json,.json" hidden></label>':''}
-      <button class="btn ghost" id="btnImport">Atkurti iš teksto</button></div>
-    <div class="panel"><h3>Išvalyti viską</h3><p class="note">Ištrins sandėliuką, istoriją ir nuotraukas šiame įrenginyje.</p>
-      <button class="btn toss" id="btnWipe">Išvalyti</button><div id="wipeConfirm" hidden class="row2"><button class="btn ghost" id="wipeNo">Ne</button><button class="btn toss" id="wipeYes">Taip, ištrinti</button></div></div>
-    <p class="note" style="text-align:center">Produktų informacija ir nuotraukos: <a href="${OFF}" target="_blank" rel="noopener" style="color:var(--accent)">Open Food Facts</a> (ODbL, CC BY-SA)</p>`,true);
+  openSheet(`<h2 style="font-family:var(--f-display);margin:6px 0 0;font-size:24px">${t('Nustatymai')}</h2>
+    <div class="panel"><h3>${t('Kalba')} / Language</h3><div class="seg" id="langSeg"><button data-lang="auto" aria-pressed="${!prefs.lang||prefs.lang==='auto'}">${t('Automatiškai')}</button><button data-lang="lt" aria-pressed="${prefs.lang==='lt'}">Lietuvių</button><button data-lang="en" aria-pressed="${prefs.lang==='en'}">English</button></div></div>
+    <div class="panel"><h3>${t('Atsarginė kopija')}</h3><p class="note">${t('Duomenys ir nuotraukos saugomi tik šiame telefone. Kartais pasidaryk kopiją.')}</p>
+      <div class="row2"><button class="btn line" id="btnExport">${t('Kopijuoti')}</button>${SITE?'<button class="btn line" id="btnDl">'+t('Atsisiųsti failą')+'</button>':''}</div>
+      <textarea id="ioText" placeholder="${t('Įklijuok anksčiau nukopijuotus duomenis ir spausk „Atkurti“')}" aria-label="${t('Duomenys')}"></textarea>
+      ${SITE?'<label class="btn ghost" style="cursor:pointer">'+t('Atkurti iš failo')+'<input type="file" id="fileIn" accept="application/json,.json" hidden></label>':''}
+      <button class="btn ghost" id="btnImport">${t('Atkurti iš teksto')}</button></div>
+    <div class="panel"><h3>${t('Išvalyti viską')}</h3><p class="note">${t('Ištrins sandėliuką, istoriją ir nuotraukas šiame įrenginyje.')}</p>
+      <button class="btn toss" id="btnWipe">${t('Išvalyti')}</button><div id="wipeConfirm" hidden class="row2"><button class="btn ghost" id="wipeNo">${t('Ne')}</button><button class="btn toss" id="wipeYes">${t('Taip, ištrinti')}</button></div></div>
+    <p class="note" style="text-align:center">${t('Produktų informacija ir nuotraukos:')} <a href="${OFF}" target="_blank" rel="noopener" style="color:var(--accent)">Open Food Facts</a> (ODbL, CC BY-SA)</p>`,true);
   const data=()=>JSON.stringify({v:2,exported:new Date().toISOString(),items:db.items,history:db.history,cache:db.cache,photos});
   const restore=txt=>{try{const j=JSON.parse(txt);if(!Array.isArray(j.items))throw 0;snapshot();db.items=j.items;db.history=j.history||[];db.cache=Object.assign(db.cache,j.cache||{});migrate();
-      Object.entries(j.photos||{}).forEach(([k,v])=>{photos[k]=v;idb.put(k,v)});save();render();closeSheet();toast('Duomenys atkurti')}catch(e){toast('Netinkami duomenys. Įklijuok visą kopiją.',false)}};
-  $('#btnExport').onclick=async()=>{const d=data();try{await navigator.clipboard.writeText(d);toast('Nukopijuota',false)}catch(e){$('#ioText').value=d;$('#ioText').select();toast('Pažymėta, nukopijuok',false)}};
+      Object.entries(j.photos||{}).forEach(([k,v])=>{photos[k]=v;idb.put(k,v)});save();render();closeSheet();toast(t('Duomenys atkurti'))}catch(e){toast(t('Netinkami duomenys. Įklijuok visą kopiją.'),false)}};
+  $('#langSeg').onclick=e=>{const b=e.target.closest('[data-lang]');if(!b)return;prefs.lang=b.dataset.lang;savePrefs();location.reload()};
+  $('#btnExport').onclick=async()=>{const d=data();try{await navigator.clipboard.writeText(d);toast(t('Nukopijuota'),false)}catch(e){$('#ioText').value=d;$('#ioText').select();toast(t('Pažymėta, nukopijuok'),false)}};
   if(SITE){
     $('#btnDl').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data()],{type:'application/json'}));a.download=`sandeliukas-${localIso(0)}.json`;document.body.appendChild(a);a.click();a.remove()};
     $('#fileIn').onchange=e=>{const f=e.target.files[0];if(f)f.text().then(restore)};
@@ -891,10 +930,15 @@ $('#btnSettings').onclick=()=>{
   $('#btnImport').onclick=()=>restore($('#ioText').value);
   $('#btnWipe').onclick=()=>{$('#btnWipe').hidden=true;$('#wipeConfirm').hidden=false};
   $('#wipeNo').onclick=()=>{$('#btnWipe').hidden=false;$('#wipeConfirm').hidden=true};
-  $('#wipeYes').onclick=()=>{snapshot();db.items=[];db.history=[];Object.keys(photos).forEach(k=>{delete photos[k];idb.del(k)});save();render();closeSheet();toast('Viskas išvalyta')};
+  $('#wipeYes').onclick=()=>{snapshot();db.items=[];db.history=[];Object.keys(photos).forEach(k=>{delete photos[k];idb.del(k)});save();render();closeSheet();toast(t('Viskas išvalyta'))};
 };
 
 /* ---------- start ---------- */
+if(LANG!=='lt'){const S=[['#btnSettings','aria-label','Nustatymai'],['#q','placeholder','Ieškoti sandėliuke'],['#demoBanner span','text','Rodomi pavyzdiniai produktai, kad matytum, kaip atrodo.'],['#btnClearDemo','text','Išvalyti'],['#locChips','aria-label','Filtras'],['#histChips','aria-label','Istorijos filtras'],
+  ['#btnScan','aria-label','Skenuoti brūkšninį kodą'],['#camErr h3','text','Kamera nepasiekiama'],['#camErrMsg','text','Įvesk kodą ranka žemiau.'],['#btnCloseScan','aria-label','Uždaryti'],['.mode','aria-label','Režimas'],['#modeShop','text','Perku'],['#modeCheck','text','Tikrinu'],['#btnZoom','aria-label','Priartinti'],['#btnTorch','aria-label','Žibintuvėlis'],
+  ['#scanStatus','text','Nukreipk kamerą į brūkšninį kodą'],['#manualCode','placeholder','Arba įvesk kodą'],['#manualCode','aria-label','Brūkšninis kodas'],['#manualForm button','text','Ieškoti'],['#btnSheetClose','aria-label','Uždaryti'],['#toastUndo','text','Atšaukti'],['#tabPantry','text','Sandėliukas'],['#tabHistory','text','Istorija']];
+  S.forEach(([sel,prop,lt])=>{const el=$(sel);if(!el)return;if(prop==='text'){const tn=[...el.childNodes].reverse().find(n=>n.nodeType===3&&n.textContent.trim());if(tn)tn.textContent=t(lt);else el.textContent=t(lt)}else el.setAttribute(prop,t(lt))});
+  document.title=t('Sandėliukas')}
 load();render();
 idb.open().then(()=>idb.all()).then(render).catch(()=>{});
 if(SITE&&'serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
